@@ -17,4 +17,15 @@ Available options
 * triangle counter (that is symetric sawtooth)
 * counter offset between the two legs
 
+Output Examples
+---------------
+
+Sawtooth counter, +Vdc/-Vdc output:
+
+.. image:: https://github.com/pierre-haessig/inverter-modulation/raw/master/pwm_complementary.png
+
+Triangle counter, +Vdc/0/-Vdc output:
+
+.. image:: https://github.com/pierre-haessig/inverter-modulation/raw/master/pwm_symetrical.png
+
 Pierre Haessig - February 1st, 2012
