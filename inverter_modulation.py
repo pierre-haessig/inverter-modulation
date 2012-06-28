@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from traits.api import Range, Enum, Bool, HasTraits
 
 ### Parameters of the plot
-N = 1000 # How many points in the plots
+N = 100 # How many points in the plots
 T = 1 # Period of the modulator
 Vdc = 1. # Amplitude of the DC bus
 
@@ -30,14 +30,14 @@ pwm = {}
 
 class ModulationParameters(HasTraits):
     '''parameters of the PWM modulation'''
-    duty_cycle = Range(0.,1.,0.1,
+    duty_cycle = Range(0.,1.,0.25,
                        label=u'duty cycle',
                        desc= u'modulation duty cycle')
     counter_type = Enum(('sawtooth', 'triangle'),
                         label=u'counter type',
                         desc= u'modulator counter type')
     
-    revert_counter_2 = Bool(True,
+    revert_counter_2 = Bool(False,
                             label=u'revert counter 2',
                             desc= u'whether to revert counter 2')
     offset_counter_2 = Range(0.,1.,0.0,
@@ -79,7 +79,7 @@ def init_plot_pwm(duty_cycle, counter_type, revert_counter_2, offset_counter_2):
     
     ### Compute Legs voltages:
     volt1 = (counter1 < duty_cycle)*Vdc
-    volt2 = (counter2 < (1-duty_cycle))*Vdc
+    volt2 = (counter2 >= duty_cycle)*Vdc
     volt_inv= volt1-volt2
     
     ### Plot:
@@ -105,10 +105,10 @@ def init_plot_pwm(duty_cycle, counter_type, revert_counter_2, offset_counter_2):
 
     # Leg 2
     pwm['cnt_line2'],pwm['volt_line2'] = ax2.plot(t, counter2, t, volt2, 'r')
-    pwm['cmp_line2'] = ax2.hlines(1-duty_cycle, t.min(), t.max(),
+    pwm['cmp_line2'] = ax2.hlines(duty_cycle, t.min(), t.max(),
                            linestyle='dashed', colors='b')
-    pwm['cmp_fill2'] = ax2.fill_between(t, (1-duty_cycle), counter2,
-                            where=(counter2 <(1-duty_cycle)), alpha=0.2)
+    pwm['cmp_fill2'] = ax2.fill_between(t, duty_cycle, counter2,
+                            where= counter2 >= duty_cycle, alpha=0.2)
     ax2.set_title('Leg 2 modulation')
     ax2.legend((pwm['cnt_line2'],pwm['cmp_line2'],pwm['volt_line2']),('count 2','1 - duty','volt 2'))
     ax2.set_ylim(min(-.1*Vdc,-0.1), max(1.1*Vdc,1.1))
@@ -152,7 +152,7 @@ def update_plot_pwm(duty_cycle, counter_type, revert_counter_2, offset_counter_2
 
     ### Compute Legs voltages:
     volt1 = (counter1 < duty_cycle)*Vdc
-    volt2 = (counter2 < (1-duty_cycle))*Vdc
+    volt2 = (counter2 >= duty_cycle)*Vdc
     volt_inv= volt1-volt2
 
     ### Plot:
@@ -170,10 +170,10 @@ def update_plot_pwm(duty_cycle, counter_type, revert_counter_2, offset_counter_2
     pwm['cnt_line2'].set_data(t, counter2)
     pwm['volt_line2'].set_data(t, volt2)
     pwm['cmp_fill2'].remove()
-    pwm['cmp_fill2'] = pwm['ax2'].fill_between(t, (1-duty_cycle), counter2,
-                                   where=(counter2 <(1-duty_cycle)), alpha=0.2)
+    pwm['cmp_fill2'] = pwm['ax2'].fill_between(t, duty_cycle, counter2,
+                                   where = counter2 >= duty_cycle, alpha=0.2)
     pwm['cmp_line2'].remove()
-    pwm['cmp_line2'] = pwm['ax2'].hlines(1-duty_cycle, t.min(), t.max(),
+    pwm['cmp_line2'] = pwm['ax2'].hlines(duty_cycle, t.min(), t.max(),
                                          linestyle='dashed', colors='b')
 
     # Inverter voltages
