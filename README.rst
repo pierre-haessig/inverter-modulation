@@ -29,3 +29,8 @@ Triangle counter, +Vdc/0/-Vdc output:
 .. image:: https://github.com/pierre-haessig/inverter-modulation/raw/master/pwm_symetrical.png
 
 Pierre Haessig - February 1st, 2012
+
+Update June 2012: 
+Does not clear anymore the figure at each plot update,
+but use set_data() or remove() method instead.
+-> Better performance (animation fluidity) expected.
