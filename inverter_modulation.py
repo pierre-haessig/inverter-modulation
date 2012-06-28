@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from traits.api import Range, Enum, Bool, HasTraits
 
 ### Parameters of the plot
-N = 100 # How many points in the plots
+N = 1000 # How many points in the plots
 T = 1 # Period of the modulator
 Vdc = 1. # Amplitude of the DC bus
 
