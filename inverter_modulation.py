@@ -178,6 +178,10 @@ def update_plot_pwm(duty_cycle, counter_type, revert_counter_2, offset_counter_2
 
     # Inverter voltages
     pwm['volt_line_inv'].set_data(t, volt_inv)
+    pwm['avg_line_inv'].remove()
+    pwm['avg_line_inv'] = pwm['ax_inv'].hlines(Vdc*(2*duty_cycle-1),
+                                               t.min(), t.max(),
+                                linestyle='dashed', colors='r', label='average')
     pwm['fig'].canvas.draw()
 # end update_plot_pwm
 
